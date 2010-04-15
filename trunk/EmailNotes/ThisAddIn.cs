@@ -70,20 +70,6 @@ namespace EmailNotes
         {
             if (mail != null)
             {
-//                 string subject = mail.Subject;
-//                 string filter = @"@SQL=""urn:schemas:httpmail:subject"" like '%" + subject + "%'";
-//                 Outlook.Table tbl = Application.Session.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox).GetTable(filter, Outlook.OlTableContents.olUserItems);
-//                 string result = "";
-//                 while (!tbl.EndOfTable)
-//                 {
-//                     Outlook.Row row = tbl.GetNextRow();
-//                     string EntryID = row["EntryID"].ToString();
-//                     Outlook.MailItem oMail = (Outlook.MailItem)Application.Session.GetItemFromID(EntryID, Type.Missing);
-//                     result += oMail.Subject + " from " + oMail.SenderName + " on " + oMail.SentOn.ToString() + System.Environment.NewLine;
-//                     // TODO: Actually delete it (oMail.Delete())
-//                 }
-
-
                 Outlook.UserProperty oProp = GetCustomNotestUserProperty(mail);
                 string NotesStr = oProp.Value.ToString();
                 //oProp.Value = "Umar inam";
@@ -109,38 +95,7 @@ namespace EmailNotes
         }
 
 
-//         private void test()
-//         {
-//             //////////////////////////////////////////////////////////////////////////
-//             {
-//             Outlook.ApplicationClass myOlApp = null;
-//             Outlook.NameSpace newNS = null;
-//             myOlApp = new Outlook.ApplicationClass();
-//             newNS = myOlApp.GetNamespace("MAPI");
-//             Outlook.MAPIFolder mapi1 = newNS.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderInbox);
-//             string filter = "";
-//             Outlook.Table inboxTable = mapi1.GetTable(filter, Outlook.OlTableContents.olUserItems);
-//             while (!inboxTable.EndOfTable)
-//             {
-//                 // get the row item
-//                 Outlook.Row myrow = inboxTable.GetNextRow();
-//                 string subject = (string)myrow["Subject"];
-//                 string EntryID = "";
-//                 EntryID = Convert.ToString(myrow["EntryID"]);
-//                 string StoreID = "";
-//                 StoreID = Convert.ToString(mapi1.StoreID);
-//                 if (subject == "Today's WeatherDirect Forecast for Hensall")
-//                 {
-//                     Outlook.MailItem oMail = (Outlook.MailItem)myOlApp.Session.GetFolderFromID(EntryID, StoreID);
-//                     oMail.Delete();
-//                 }
-//                 // release objects
-//                 myrow = null;
-//             }
-//             }
-// 
-//             //////////////////////////////////////////////////////////////////////////
-//         }
+
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
