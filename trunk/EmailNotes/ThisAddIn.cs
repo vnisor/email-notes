@@ -13,7 +13,8 @@ namespace EmailNotes
     public partial class ThisAddIn
     {
 
-        private Office.CommandBarButton btn;
+        private Office.CommandBarButton btnNotes;
+        private Office.CommandBarButton btnID;
         private Outlook.MailItem mail;
         // the id of the field we are working with
         private const string Notes_CustomNotes = "Notes.Email.Custom";
@@ -31,11 +32,17 @@ namespace EmailNotes
                 mail = Selection[1] as Outlook.MailItem;
                 if (mail != null)
                 {
-                    btn = CommandBar.Controls.Add(Office.MsoControlType.msoControlButton, missing, missing, missing, missing) as Office.CommandBarButton;
-                    btn.Style = Microsoft.Office.Core.MsoButtonStyle.msoButtonIconAndCaption;
-                    btn.Caption = "Email Notes...";
-                    btn.FaceId = 1996;
-                    btn.Click += new Office._CommandBarButtonEvents_ClickEventHandler(btn_EmailNotes);
+                    btnID = CommandBar.Controls.Add(Office.MsoControlType.msoControlButton, missing, missing, missing, missing) as Office.CommandBarButton;
+                    btnID.Style = Microsoft.Office.Core.MsoButtonStyle.msoButtonIconAndCaption;
+                    btnID.Caption = "Copy Email ID";
+                    btnID.FaceId = 224;
+                    btnID.Click += new Office._CommandBarButtonEvents_ClickEventHandler(btn_CopyEmailID);
+
+                    btnNotes = CommandBar.Controls.Add(Office.MsoControlType.msoControlButton, missing, missing, missing, missing) as Office.CommandBarButton;
+                    btnNotes.Style = Microsoft.Office.Core.MsoButtonStyle.msoButtonIconAndCaption;
+                    btnNotes.Caption = "Email Notes...";
+                    btnNotes.FaceId = 1996;
+                    btnNotes.Click += new Office._CommandBarButtonEvents_ClickEventHandler(btn_EmailNotes);
                 }
             }
         }
@@ -91,6 +98,17 @@ namespace EmailNotes
                 nItem = (Application.Session.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderDeletedItems).Items.Find("[Subject] ='" + noteSubject + "'")) as NoteItem;
                 if (null != nItem)
                     nItem.Delete();
+            }
+        }
+
+        void btn_CopyEmailID(Office.CommandBarButton Ctrl, ref bool CancelDefault)
+        {
+            if (mail != null)
+            {
+                string strEmailID = string.Empty;
+                strEmailID = mail.EntryID;
+                strEmailID = "[[" + mail.Subject + "|" + "outlook:" + mail.EntryID + "]]";
+                Clipboard.SetText(strEmailID);
             }
         }
 
