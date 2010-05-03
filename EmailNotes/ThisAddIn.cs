@@ -18,6 +18,7 @@ namespace EmailNotes
         private Outlook.MailItem mail;
         // the id of the field we are working with
         private const string Notes_CustomNotes = "Notes.Email.Custom";
+        private const string CatagoryWithNotes = "WithNotes";
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
@@ -89,8 +90,25 @@ namespace EmailNotes
                 nItem.Width = 545;
 
                 nItem.Display(1);
-                mail.PropertyAccessor.SetProperty("http://schemas.microsoft.com/mapi/proptag/0x10800003", 771);
-                oProp.Value = nItem.Body;
+                //mail.PropertyAccessor.SetProperty("http://schemas.microsoft.com/mapi/proptag/0x10800003", 771);
+                if (null != nItem.Body && nItem.Body.Length > 0)
+                {
+                    oProp.Value = nItem.Body;
+                    if (null == mail.Categories || !mail.Categories.Contains(CatagoryWithNotes))
+                        mail.Categories = mail.Categories + "," + CatagoryWithNotes;
+                }
+                else
+                {
+                    oProp.Value = string.Empty;
+                    if (null != mail.Categories && mail.Categories.Contains(CatagoryWithNotes))
+                    {
+                        mail.Categories = mail.Categories.Replace("," + CatagoryWithNotes, "");
+                        mail.Categories = mail.Categories.Replace(CatagoryWithNotes + ",", "");
+                        mail.Categories = mail.Categories.Replace(CatagoryWithNotes, "");
+                    }
+
+                }
+                
                 
                 string noteSubject = nItem.Subject;// = Notes_CustomNotes;
                 nItem.Delete();
